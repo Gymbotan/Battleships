@@ -13,6 +13,7 @@ namespace Battleships.Ships
             Size = 5;
             IsAlive = true;
             Name = "Battleship";
+            Holes = 0;
         }
     }
 }

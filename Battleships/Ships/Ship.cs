@@ -26,5 +26,6 @@ namespace Battleships.Ships
         public bool IsAlive { get; set; }
         public bool IsSet { get; set; }
         public string Name { get; set; }
+        public int Holes { get; set; }
     }
 }
