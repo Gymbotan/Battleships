@@ -17,29 +17,17 @@ namespace Battleships
             while (isGameRunning)
             {
                 char button = Console.ReadKey(true).KeyChar;
-                //if (button == 'q' || button == 'Q')
-                //{
-                //    break;
-                //}
-
                 ClickHandling(ref isGameRunning, button);
             }
 
-            //Ship[] ships = new Ship[] { new BattleShip(), new BattleShip(), new BattleShip() };
-            //Console.WriteLine(ships.All(s => s.IsAlive));
-
-            //int a = 1;
-            //string b = "abc";
-            //bool c = false;
-
-            //Console.Write("{0} - {1}{2}", a, b, c ? " - is already set." : ".");
-
-            //char ch = (char)((int)'A' + 1);
-            //Console.WriteLine(ch);
-            Console.WriteLine("·");
             Console.WriteLine("\nThank you for playing the Battleships!");
         }
 
+        /// <summary>
+        /// Keyboard button click handling.
+        /// </summary>
+        /// <param name="isGameRunning">should we stop the game.</param>
+        /// <param name="button">button a player press.</param>
         private static void ClickHandling(ref bool isGameRunning, char button)
         {
             switch(button)

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Battleships.Players
 {
+    /// <summary>
+    /// Class of a rookie computer player.
+    /// </summary>
     public class ComputerRookiePlayer : IPlayer
     {
         private readonly int[,] shipsPlacement;
@@ -14,6 +17,9 @@ namespace Battleships.Players
         private readonly char[,] enemyGrid;
         private readonly Ship[] ships;
 
+        /// <summary>
+        /// Create new object of ComputerRookiePlayer.
+        /// </summary>
         public ComputerRookiePlayer()
         {
             ownGrid = new char[10, 10];
@@ -30,6 +36,10 @@ namespace Battleships.Players
             ships = new Ship[1] { new BattleShip() };
         }
 
+        /// <summary>
+        /// Attack of enemy grid. Rookie computer player fires randomly.
+        /// </summary>
+        /// <returns></returns>
         public (int, int) Attack()
         {
             Random rnd = new();
@@ -45,30 +55,46 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Changing of enemy grid after getting results of attack.
+        /// </summary>
+        /// <param name="row">row you fired.</param>
+        /// <param name="column">column you fired.</param>
+        /// <param name="isHit">result of attack.</param>
         public void ChangeEnemyGrid(int row, int column, bool isHit)
         {
-            if (isHit)
-            {
-                enemyGrid[row, column] = '@';
-            }
-            else
-            {
-                enemyGrid[row, column] = '·';
-            }
+            enemyGrid[row, column] = isHit ? '@' : '·';
+            //if (isHit)
+            //{
+            //    enemyGrid[row, column] = '@';
+            //}
+            //else
+            //{
+            //    enemyGrid[row, column] = '·';
+            //}
         }
 
+        /// <summary>
+        /// Changing of own grid after getting enemy shot.
+        /// </summary>
+        /// <param name="row">row the enemy fired.</param>
+        /// <param name="column">column the enemy fired.</param>
         public void ChangeOwnGrid(int row, int column)
         {
-            if (shipsPlacement[row, column] != 0)
-            {
-                ownGrid[row, column] = '@';
-            }
-            else
-            {
-                ownGrid[row, column] = '·';
-            }
+            ownGrid[row, column] = shipsPlacement[row, column] != 0 ? '@' : '·';
+            //if (shipsPlacement[row, column] != 0)
+            //{
+            //    ownGrid[row, column] = '@';
+            //}
+            //else
+            //{
+            //    ownGrid[row, column] = '·';
+            //}
         }
 
+        /// <summary>
+        /// Delete all the ships from own grid.
+        /// </summary>
         public void DeleteShips()
         {
             for (int i = 0; i < 10; i++)
@@ -81,6 +107,12 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Reaction on getting shot.
+        /// </summary>
+        /// <param name="row">row the enemy fired.</param>
+        /// <param name="column">column the enemy fired.</param>
+        /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
         public (bool, bool, bool) GetShot(int row, int column)
         {
             bool isHit = false;
@@ -111,6 +143,9 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Set (place) all ships on the grid.
+        /// </summary>
         public void SetShip()
         {
             DeleteShips();
@@ -121,6 +156,11 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Randomly choose place for a ship.
+        /// </summary>
+        /// <param name="shipSize">Size of a ship.</param>
+        /// <param name="shipNumber">Index number of a ship.</param>
         private void ChooseShipPlacement(int shipSize, int shipNumber)
         {
             // TODO: add checking is ships collide with each other
@@ -133,7 +173,7 @@ namespace Battleships.Players
                 int column1 = rnd.Next(0, 9);
                 int row2, column2;
                 int count = 0;
-                while(!isSet && count < 5) // if we can not set the ship, maybe it is imposiible. Let's choose a new initial point
+                while(!isSet && count < 5) // if we can not set (place) the ship, maybe it is imposiible. Let's choose a new initial point
                 {
                     count++;
                     switch (rnd.Next(1,4)) // we randomly choose direction where to set the ship from initial point
@@ -191,6 +231,13 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Set (place) a ship on a grid on selected position (vertically).
+        /// </summary>
+        /// <param name="row1">starting row index.</param>
+        /// <param name="row2">ending row index.</param>
+        /// <param name="column">column index.</param>
+        /// <param name="shipNumber">Ship's index number.</param>
         private void SetShipVertical(int row1, int row2, int column, int shipNumber)
         {
             for (int i = Math.Min(row1, row2); i < Math.Max(row1, row2); i++)
@@ -199,7 +246,13 @@ namespace Battleships.Players
                 ownGrid[i, column] = '#';
             }
         }
-
+        /// <summary>
+        /// Set (place) a ship on a grid on selected position (horizontally).
+        /// </summary>
+        /// <param name="row">row index.</param>
+        /// <param name="column1">starting column index.</param>
+        /// <param name="column2">ending column index.</param>
+        /// <param name="shipNumber">Ship's index number.</param>
         private void SetShipHorizontal(int row, int column1, int column2, int shipNumber)
         {
             for (int i = Math.Min(column1, column2); i < Math.Max(column1, column2); i++)
@@ -209,11 +262,18 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Show how own and enemy's grids look like.
+        /// </summary>
         public void ShowGrids()
         {
             Console.WriteLine("You can not see computer's ships' location!");
         }
 
+        /// <summary>
+        /// Check is this player ready to play (are all the ships placed on the grid.).
+        /// </summary>
+        /// <returns>Is ready or no.</returns>
         public bool IsReadyToPlay()
         {
             return ships.All(x => x.IsSet);

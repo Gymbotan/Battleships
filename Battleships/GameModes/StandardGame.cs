@@ -7,17 +7,26 @@ using System.Threading.Tasks;
 
 namespace Battleships.GameModes
 {
+    /// <summary>
+    /// Standard game mod of battleships.
+    /// </summary>
     public class StandardGame
     {
-        readonly IPlayer HumanPlayer;
-        readonly IPlayer ComputerPlayer;
+        private readonly IPlayer HumanPlayer;
+        private readonly IPlayer ComputerPlayer;
 
+        /// <summary>
+        /// Create a new object of StandardGame.
+        /// </summary>
         public StandardGame()
         {
             HumanPlayer = new RealPlayer();
             ComputerPlayer = new ComputerRookiePlayer();
         }
 
+        /// <summary>
+        /// Preparation for game. Place all the ships oh grids.
+        /// </summary>
         public void Prepare()
         {
             while (!ComputerPlayer.IsReadyToPlay())
@@ -40,6 +49,10 @@ namespace Battleships.GameModes
             }
         }
 
+        /// <summary>
+        /// Keyboard button click handling.
+        /// </summary>
+        /// <param name="button">button a player press.</param>
         private void ClickHandling(char button)
         {
             switch (button)
@@ -75,6 +88,9 @@ namespace Battleships.GameModes
             }
         }
 
+        /// <summary>
+        /// Game start.
+        /// </summary>
         private void Start()
         {
             Console.WriteLine("The game is begin!!!");
