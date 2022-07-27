@@ -141,7 +141,16 @@ namespace Battleships.Players
                 Console.Write($" {ch}|");
                 for (int j = 0; j < 10; j++)
                 {
-                    Console.Write($"{grid[i, j]}");
+                    if (grid[i, j] == '@')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write($"{grid[i, j]}", Console.ForegroundColor);
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.Write($"{grid[i, j]}");
+                    }
                 }
                 Console.WriteLine(" |");
             }
