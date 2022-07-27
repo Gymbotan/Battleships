@@ -12,8 +12,8 @@ namespace Battleships.GameModes
     /// </summary>
     public class StandardGame
     {
-        private readonly IPlayer HumanPlayer;
-        private readonly IPlayer ComputerPlayer;
+        private readonly BasePlayer HumanPlayer;
+        private readonly BasePlayer ComputerPlayer;
 
         /// <summary>
         /// Create a new object of StandardGame.
