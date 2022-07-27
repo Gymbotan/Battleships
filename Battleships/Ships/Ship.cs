@@ -9,17 +9,25 @@ namespace Battleships.Ships
     /// <summary>
     /// Base class for all the ships.
     /// </summary>
-    public abstract class Ship
+    public class Ship
     {
         /// <summary>
         /// Ship size.
         /// </summary>
-        private byte size;
+        private int size;
+
+        public Ship(int size, string name)
+        {
+            Size = size;
+            IsAlive = true;
+            Name = name;
+            Holes = 0;
+        }
 
         /// <summary>
         /// Ship size. Can be set only once.
         /// </summary>
-        public byte Size
+        public int Size
         {
             get
             {

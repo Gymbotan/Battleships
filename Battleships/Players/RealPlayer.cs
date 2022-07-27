@@ -33,7 +33,7 @@ namespace Battleships.Players
                     enemyGrid[i, j] = ' ';
                 }
             }
-            ships = new Ship[1] { new BattleShip() };
+            ships = new Ship[1] { new Ship(5, "Battleship") };
         }
 
         /// <summary>
@@ -82,14 +82,6 @@ namespace Battleships.Players
         public void ChangeEnemyGrid(int row, int column, bool isHit)
         {
             enemyGrid[row, column] = isHit ? '@' : '·';
-            //if (isHit)
-            //{
-            //    enemyGrid[row, column] = '@';
-            //}
-            //else
-            //{
-            //    enemyGrid[row, column] = '·';
-            //}
         }
 
         /// <summary>
@@ -100,14 +92,6 @@ namespace Battleships.Players
         public void ChangeOwnGrid(int row, int column)
         {
             ownGrid[row, column] = shipsPlacement[row, column] != 0 ? '@' : '·';
-            //if (shipsPlacement[row, column] != 0)
-            //{
-            //    ownGrid[row, column] = '@';
-            //}
-            //else
-            //{
-            //    ownGrid[row, column] = '·';
-            //}
         }
 
         /// <summary>
