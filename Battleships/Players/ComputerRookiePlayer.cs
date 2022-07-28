@@ -12,30 +12,12 @@ namespace Battleships.Players
     /// </summary>
     public class ComputerRookiePlayer : BasePlayer
     {
-        //private readonly int[,] shipsPlacement;
-        //private readonly char[,] ownGrid;
-        //private readonly char[,] enemyGrid;
-        //private readonly Ship[] ships;
-
         /// <summary>
         /// Create new object of ComputerRookiePlayer.
         /// </summary>
-        //public ComputerRookiePlayer()
-        //{
-        //    ownGrid = new char[10, 10];
-        //    enemyGrid = new char[10, 10];
-        //    shipsPlacement = new int[10, 10];
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        for (int j = 0; j < 10; j++)
-        //        {
-        //            ownGrid[i, j] = ' ';
-        //            enemyGrid[i, j] = ' ';
-        //        }
-        //    }
-        //    ships = new Ship[1] { new Ship(5, "Battleship") };
-        //}
-
+        public ComputerRookiePlayer() : base()
+        { }
+       
         /// <summary>
         /// Attack of enemy grid. Rookie computer player fires randomly.
         /// </summary>
@@ -54,78 +36,6 @@ namespace Battleships.Players
                 }
             }
         }
-
-        /// <summary>
-        /// Changing of enemy grid after getting results of attack.
-        /// </summary>
-        /// <param name="row">row you fired.</param>
-        /// <param name="column">column you fired.</param>
-        /// <param name="isHit">result of attack.</param>
-        //public void ChangeEnemyGrid(int row, int column, bool isHit)
-        //{
-        //    enemyGrid[row, column] = isHit ? '@' : '·';
-        //}
-
-        /// <summary>
-        /// Changing of own grid after getting enemy shot.
-        /// </summary>
-        /// <param name="row">row the enemy fired.</param>
-        /// <param name="column">column the enemy fired.</param>
-        //public void ChangeOwnGrid(int row, int column)
-        //{
-        //    ownGrid[row, column] = shipsPlacement[row, column] != 0 ? '@' : '·';
-        //}
-
-        /// <summary>
-        /// Delete all the ships from own grid.
-        /// </summary>
-        //public void DeleteShips()
-        //{
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        for (int j = 0; j < 10; j++)
-        //        {
-        //            ownGrid[i, j] = ' ';
-        //            shipsPlacement[i, j] = 0;
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// Reaction on getting shot.
-        /// </summary>
-        /// <param name="row">row the enemy fired.</param>
-        /// <param name="column">column the enemy fired.</param>
-        /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
-        //public (bool, bool, bool) GetShot(int row, int column)
-        //{
-        //    bool isHit = false;
-        //    bool isDead = false;
-        //    bool isLose = false;
-        //    int placeOfShot = shipsPlacement[row, column];
-        //    if (placeOfShot <= 0)
-        //    {
-        //        return (isHit, isDead, isLose);
-        //    }
-        //    else
-        //    {
-        //        shipsPlacement[row, column] = -1;
-        //        isHit = true;
-        //        ships[placeOfShot - 1].Holes++;
-        //        if (ships[placeOfShot - 1].Holes == ships[placeOfShot - 1].Size)
-        //        {
-        //            ships[placeOfShot - 1].IsAlive = false;
-        //            isDead = true;
-        //        }
-
-        //        if (ships.All(s => !s.IsAlive))
-        //        {
-        //            isLose = true;
-        //        }
-
-        //        return (isHit, isDead, isLose);
-        //    }
-        //}
 
         /// <summary>
         /// Set (place) all ships on the grid.
@@ -147,7 +57,6 @@ namespace Battleships.Players
         /// <param name="shipNumber">Index number of a ship.</param>
         private void ChooseShipPlacement(int shipSize, int shipNumber)
         {
-            // TODO: add checking is ships collide with each other
             bool isSet = false;
             while (!isSet)
             {
@@ -169,9 +78,12 @@ namespace Battleships.Players
                             }
                             else
                             {
-                                row2 = row1 - shipSize + 1; 
-                                SetShipVertical(row1, row2, column1, shipNumber);
-                                isSet = true;
+                                row2 = row1 - shipSize + 1;
+                                if (IsPossibleToSetShip(row1, column1, row2, column1))
+                                {
+                                    SetShipVertical(row1, row2, column1, shipNumber);
+                                    isSet = true;
+                                }
                                 break;
                             }
                         case 2: // down
@@ -182,8 +94,11 @@ namespace Battleships.Players
                             else
                             {
                                 row2 = row1 + shipSize - 1;
-                                SetShipVertical(row1, row2, column1, shipNumber);
-                                isSet = true;
+                                if (IsPossibleToSetShip(row1, column1, row2, column1))
+                                {
+                                    SetShipVertical(row1, row2, column1, shipNumber);
+                                    isSet = true;
+                                }
                                 break;
                             }
                         case 3: // left
@@ -194,8 +109,11 @@ namespace Battleships.Players
                             else
                             {
                                 column2 = column1 - shipSize + 1;
-                                SetShipHorizontal(row1, column1, column2, shipNumber);
-                                isSet = true;
+                                if (IsPossibleToSetShip(row1, column1, row1, column2))
+                                {
+                                    SetShipHorizontal(row1, column1, column2, shipNumber);
+                                    isSet = true;
+                                }
                                 break;
                             }
                         case 4: // right
@@ -206,8 +124,11 @@ namespace Battleships.Players
                             else
                             {
                                 column2 = row1 + shipSize - 1;
-                                SetShipHorizontal(row1, column1, column2, shipNumber);
-                                isSet = true;
+                                if (IsPossibleToSetShip(row1, column1, row1, column2))
+                                {
+                                    SetShipHorizontal(row1, column1, column2, shipNumber);
+                                    isSet = true;
+                                }
                                 break;
                             }
                     }
@@ -245,76 +166,5 @@ namespace Battleships.Players
                 ownGrid[row, i] = '#';
             }
         }
-
-        /// <summary>
-        /// Show how own and enemy's grids look like.
-        /// </summary>
-        //public void ShowGrids()
-        //{
-        //    Console.WriteLine("You can not see computer's ships' location!");
-        //}
-
-        /// <summary>
-        /// Check is this player ready to play (are all the ships placed on the grid.).
-        /// </summary>
-        /// <returns>Is ready or no.</returns>
-        //public bool IsReadyToPlay()
-        //{
-        //    return ships.All(x => x.IsSet);
-        //}
-
-        //private void SetShipIntoGrids(int row1, int column1, int row2, int column2)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private int CharToInt(char ch) => ch switch
-        //{
-        //    'a' => 1,
-        //    'b' => 2,
-        //    'c' => 3,
-        //    'd' => 4,
-        //    'e' => 5,
-        //    'f' => 6,
-        //    'g' => 7,
-        //    'h' => 8,
-        //    'i' => 9,
-        //    'j' => 10,
-        //    _ => throw new ArgumentOutOfRangeException(nameof(ch)),
-        //};
-
-        //private (int, int) InputCoordinates()
-        //{
-        //    int column;
-        //    char charRow;
-
-        //    while (true)
-        //    {
-        //        var input = Console.ReadLine().ToLower();
-        //        charRow = input[0];
-        //        if (charRow < 'a' || charRow > 'j')
-        //        {
-        //            Console.WriteLine("You inputed wrong coordinates. The first coordinate should be from 'a' to 'j'. Please try again.");
-        //            continue;
-        //        }
-
-        //        if (!int.TryParse(input.Substring(1), out column))
-        //        {
-        //            Console.WriteLine("Can not recognize second coordinate as a number. Please try again.");
-        //            continue;
-        //        }
-
-        //        if (column < 1 || column > 10)
-        //        {
-        //            Console.WriteLine("You inputed wrong coordinates. The second coordinate should be from '1' to '10'. Please try again.");
-        //            continue;
-        //        }
-
-        //        break;
-        //    }
-
-        //    int row = CharToInt(charRow);
-        //    return (row, column);
-        //}
     }
 }

@@ -165,5 +165,50 @@ namespace Battleships.Players
         {
             return ships.All(x => x.IsSet);
         }
+
+        protected bool IsPossibleToSetShip(int row1, int column1, int row2, int column2)
+        {
+            if (row1 < 1 || row1 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(row1));
+            }
+            if (column1 < 1 || column1 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(column1));
+            }
+            if (row2 < 1 || row2 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(row2));
+            }
+            if (column2 < 1 || column2 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(column2));
+            }
+
+            if (row1 == row2)
+            {
+                for (int i = Math.Min(column1, column2); i < Math.Max(column1, column2); i++)
+                {
+                    if (shipsPlacement[row1 - 1, i - 1] != 0)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else if (column1 == column2)
+            {
+                for (int i = Math.Min(row1, row2); i < Math.Max(row1, row2); i++)
+                {
+                    if (shipsPlacement[i - 1, column1 - 1] != 0)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+                return false; // remove
+        }
     }
 }
