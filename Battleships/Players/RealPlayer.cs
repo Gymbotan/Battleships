@@ -24,7 +24,7 @@ namespace Battleships.Players
         /// <returns> Coordinates (row, column) you want to attack.</returns>
         public override (int, int) Attack()
         {
-            Console.WriteLine("Input coordinates you want to attack (from a1 to j10):");
+            Console.WriteLine("\nInput coordinates you want to attack (from a1 to j10) or 'position' to see grids:");
             return InputCoordinates();
             //while (true)
             //{
@@ -127,7 +127,7 @@ namespace Battleships.Players
                 var coordinate2 = InputCoordinates();
                 if (coordinate1.Item1 == coordinate2.Item1 && Math.Abs(coordinate1.Item2 - coordinate2.Item2) == shipSize - 1)
                 {
-                    if (IsPossibleToSetShip(coordinate1.Item1, coordinate1.Item2, coordinate1.Item2, coordinate2.Item2))
+                    if (IsPossibleToSetShip(coordinate1.Item1, coordinate1.Item2, coordinate2.Item1, coordinate2.Item2))
                     {
                         int row = coordinate1.Item1;
                         int column = Math.Min(coordinate1.Item2, coordinate2.Item2);
@@ -145,7 +145,7 @@ namespace Battleships.Players
                 }
                 else if (coordinate1.Item2 == coordinate2.Item2 && Math.Abs(coordinate1.Item1 - coordinate2.Item1) == shipSize - 1)
                 {
-                    if (IsPossibleToSetShip(coordinate1.Item1, coordinate1.Item2, coordinate1.Item2, coordinate2.Item2))
+                    if (IsPossibleToSetShip(coordinate1.Item1, coordinate1.Item2, coordinate2.Item1, coordinate2.Item2))
                     {
                         int row = Math.Min(coordinate1.Item1, coordinate2.Item1);
                         int column = coordinate1.Item2;
@@ -200,6 +200,12 @@ namespace Battleships.Players
             while (true)
             {
                 var input = Console.ReadLine().ToLower();
+                if (input == "position")
+                {
+                    ShowGrids();
+                    continue;
+                }
+                
                 charRow = input[0];
                 if (charRow < 'a' || charRow > 'j')
                 {
@@ -218,7 +224,7 @@ namespace Battleships.Players
                     Console.WriteLine("You inputed wrong coordinates. The second coordinate should be from '1' to '10'. Please try again.");
                     continue;
                 }
-
+                
                 break;
             }
 

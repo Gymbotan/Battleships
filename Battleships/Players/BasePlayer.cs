@@ -30,7 +30,7 @@ namespace Battleships.Players
                     enemyGrid[i, j] = ' ';
                 }
             }
-            ships = new Ship[2] { new Ship(5, "Battleship"), new Ship(4, "Destroyer") };
+            ships = new Ship[3] { new Ship(5, "Battleship"), new Ship(4, "Destroyer"), new Ship(4, "Destroyer") };
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Battleships.Players
         /// <param name="isHit">result of attack.</param>
         public void ChangeEnemyGrid(int row, int column, bool isHit)
         {
-            enemyGrid[row, column] = isHit ? '@' : '·';
+            enemyGrid[row - 1, column - 1] = isHit ? '@' : '·';
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Battleships.Players
         /// <param name="column">column the enemy fired.</param>
         protected void ChangeOwnGrid(int row, int column)
         {
-            ownGrid[row, column] = shipsPlacement[row, column] != 0 ? '@' : '·';
+            ownGrid[row - 1, column - 1] = shipsPlacement[row - 1, column - 1] != 0 ? '@' : '·';
         }
 
         /// <summary>
@@ -83,22 +83,34 @@ namespace Battleships.Players
         /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
         public (bool, bool, bool) GetShot(int row, int column)
         {
+            if (row < 1 || row > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(row));
+            }
+            if (column < 1 || column > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(column));
+            }
+
             bool isHit = false;
             bool isDead = false;
             bool isLose = false;
-            int placeOfShot = shipsPlacement[row - 1, column - 1];
-            if (placeOfShot <= 0)
+            int HittedShipIndex = shipsPlacement[row - 1, column - 1];
+
+            ChangeOwnGrid(row, column);
+            
+            if (HittedShipIndex <= 0)
             {
                 return (isHit, isDead, isLose);
             }
             else
             {
-                shipsPlacement[row, column] = -1;
+                shipsPlacement[row - 1, column - 1] = -1;
                 isHit = true;
-                ships[placeOfShot - 1].Holes++;
-                if (ships[placeOfShot - 1].Holes == ships[placeOfShot - 1].Size)
+                ships[HittedShipIndex - 1].Holes++;
+                if (ships[HittedShipIndex - 1].Holes == ships[HittedShipIndex - 1].Size)
                 {
-                    ships[placeOfShot - 1].IsAlive = false;
+                    ships[HittedShipIndex - 1].IsAlive = false;
                     isDead = true;
                 }
 
@@ -187,7 +199,7 @@ namespace Battleships.Players
 
             if (row1 == row2)
             {
-                for (int i = Math.Min(column1, column2); i < Math.Max(column1, column2); i++)
+                for (int i = Math.Min(column1, column2); i <= Math.Max(column1, column2); i++)
                 {
                     if (shipsPlacement[row1 - 1, i - 1] != 0)
                     {
@@ -198,7 +210,7 @@ namespace Battleships.Players
             }
             else if (column1 == column2)
             {
-                for (int i = Math.Min(row1, row2); i < Math.Max(row1, row2); i++)
+                for (int i = Math.Min(row1, row2); i <= Math.Max(row1, row2); i++)
                 {
                     if (shipsPlacement[i - 1, column1 - 1] != 0)
                     {

@@ -32,7 +32,7 @@ namespace Battleships.Players
                 column = rnd.Next(0, 9);
                 if (enemyGrid[row, column] == ' ')
                 {
-                    return (row, column);
+                    return (row + 1, column + 1);
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace Battleships.Players
                             else
                             {
                                 row2 = row1 - shipSize + 1;
-                                if (IsPossibleToSetShip(row1, column1, row2, column1))
+                                if (IsPossibleToSetShip(row1 + 1, column1 + 1, row2 + 1, column1 + 1))
                                 {
                                     SetShipVertical(row1, row2, column1, shipNumber);
                                     isSet = true;
@@ -94,7 +94,7 @@ namespace Battleships.Players
                             else
                             {
                                 row2 = row1 + shipSize - 1;
-                                if (IsPossibleToSetShip(row1, column1, row2, column1))
+                                if (IsPossibleToSetShip(row1 + 1, column1 + 1, row2 + 1, column1 + 1))
                                 {
                                     SetShipVertical(row1, row2, column1, shipNumber);
                                     isSet = true;
@@ -109,7 +109,7 @@ namespace Battleships.Players
                             else
                             {
                                 column2 = column1 - shipSize + 1;
-                                if (IsPossibleToSetShip(row1, column1, row1, column2))
+                                if (IsPossibleToSetShip(row1 + 1, column1 + 1, row1 + 1, column2 + 1))
                                 {
                                     SetShipHorizontal(row1, column1, column2, shipNumber);
                                     isSet = true;
@@ -124,7 +124,7 @@ namespace Battleships.Players
                             else
                             {
                                 column2 = row1 + shipSize - 1;
-                                if (IsPossibleToSetShip(row1, column1, row1, column2))
+                                if (IsPossibleToSetShip(row1 + 1, column1 + 1, row1 + 1, column2 + 1))
                                 {
                                     SetShipHorizontal(row1, column1, column2, shipNumber);
                                     isSet = true;
@@ -145,7 +145,7 @@ namespace Battleships.Players
         /// <param name="shipNumber">Ship's index number.</param>
         private void SetShipVertical(int row1, int row2, int column, int shipNumber)
         {
-            for (int i = Math.Min(row1, row2); i < Math.Max(row1, row2); i++)
+            for (int i = Math.Min(row1, row2); i <= Math.Max(row1, row2); i++)
             {
                 shipsPlacement[i, column] = shipNumber;
                 ownGrid[i, column] = '#';
@@ -160,7 +160,7 @@ namespace Battleships.Players
         /// <param name="shipNumber">Ship's index number.</param>
         private void SetShipHorizontal(int row, int column1, int column2, int shipNumber)
         {
-            for (int i = Math.Min(column1, column2); i < Math.Max(column1, column2); i++)
+            for (int i = Math.Min(column1, column2); i <= Math.Max(column1, column2); i++)
             {
                 shipsPlacement[row, i] = shipNumber;
                 ownGrid[row, i] = '#';
