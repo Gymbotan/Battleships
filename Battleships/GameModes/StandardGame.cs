@@ -12,16 +12,21 @@ namespace Battleships.GameModes
     /// </summary>
     public class StandardGame
     {
-        private readonly BasePlayer HumanPlayer;
-        private readonly BasePlayer ComputerPlayer;
+        //private readonly BasePlayer HumanPlayer;
+        //private readonly BasePlayer ComputerPlayer;
+        private readonly IPlayer humanPlayer;
+        private readonly IPlayer computerPlayer;
+
 
         /// <summary>
         /// Create a new object of StandardGame.
         /// </summary>
         public StandardGame()
         {
-            HumanPlayer = new RealPlayer();
-            ComputerPlayer = new ComputerRookiePlayer();
+            //HumanPlayer = new RealPlayer();
+            //ComputerPlayer = new ComputerRookiePlayer();
+            humanPlayer = new HumanPlayer();
+            computerPlayer = new ComputerPlayer();
         }
 
         /// <summary>
@@ -29,23 +34,27 @@ namespace Battleships.GameModes
         /// </summary>
         public void Prepare()
         {
-            while (!ComputerPlayer.IsReadyToPlay())
+            //computerPlayer.ShowGrids();
+            while (!computerPlayer.isReadyToPlay())
             {
-                ComputerPlayer.SetShip();
+                computerPlayer.SetShips();
             }
 
             Console.WriteLine("To start the game you should place all your chips on the grid.\n");
-            while (true)
+
+            bool isRunning = true;
+
+            while (isRunning)
             {
-                Console.WriteLine("\nPlease press 'p' to place new ship,\npress 'v' to view current ships' positions,\npress 'd' to delete all the ship from your grid, " +
+                Console.WriteLine("\nPress 'p' to place ships,\npress 'v' to view current ships' positions,\npress 'd' to delete all the ship from your grid, " +
                     "\npress 's' to start the game, \npress 'q' to quit the game.");
                 char button = Console.ReadKey(true).KeyChar;
-                if (button == 'q' || button == 'Q')
-                {
-                    break;
-                }
+                //if (button == 'q' || button == 'Q')
+                //{
+                //    break;
+                //}
 
-                ClickHandling(button);
+                ClickHandling(button, ref isRunning);
             }
         }
 
@@ -53,16 +62,21 @@ namespace Battleships.GameModes
         /// Keyboard button click handling.
         /// </summary>
         /// <param name="button">button a player press.</param>
-        private void ClickHandling(char button)
+        private void ClickHandling(char button, ref bool isRunning)
         {
             switch (button)
             {
+                case 'q':
+                case 'Q':
+                    isRunning = false;
+                    break;
                 case 's':
                 case 'S':
-                    if (HumanPlayer.IsReadyToPlay())
+                    if (humanPlayer.isReadyToPlay())
                     {
                         Console.WriteLine("\nLet the game begin!\n");
                         Start();
+                        isRunning = false;
                     }
                     else
                     {
@@ -71,15 +85,15 @@ namespace Battleships.GameModes
                     break;
                 case 'p':
                 case 'P':
-                    HumanPlayer.SetShip();
+                    humanPlayer.SetShips();
                     break;
                 case 'v':
                 case 'V':
-                    HumanPlayer.ShowGrids();
+                    humanPlayer.ShowGrids();
                     break;
                 case 'd':
                 case 'D':
-                    HumanPlayer.DeleteShips();
+                    humanPlayer.DeleteShips();
                     Console.WriteLine("\nAll the ships were deleted.\n");
                     break;
                 default:
@@ -97,7 +111,7 @@ namespace Battleships.GameModes
 
             bool isGameRunning = true;
             int turn = 0;
-            ComputerPlayer.ShowGrids();// delete
+            computerPlayer.ShowGrids();// delete
             while (isGameRunning)
             {
                 turn++;
@@ -105,7 +119,7 @@ namespace Battleships.GameModes
                 {
                     Console.WriteLine("\nIt is your turn to fire.");
                     bool isPlayerTurn = true;
-                    while (isPlayerTurn)
+                    while (isPlayerTurn && isGameRunning)
                     {
                         (isPlayerTurn, isGameRunning) = PlayerTurn();
                     }
@@ -120,7 +134,7 @@ namespace Battleships.GameModes
                 }
             }
 
-            Console.WriteLine($"The game is over. You win! You spent {(turn + 1) / 2} turns for this.");
+            Console.WriteLine($"\nThe game is over. You win! You spent {(turn + 1) / 2} turns for this.");
             Console.WriteLine("Congratulations!!!");
             
             
@@ -131,10 +145,10 @@ namespace Battleships.GameModes
         private (bool, bool) PlayerTurn()
         {
             int row, column;
-            (row, column) = HumanPlayer.Attack();
+            (row, column) = humanPlayer.Attack();
             bool isHit, isSink, isWin;
-            (isHit, isSink, isWin) = ComputerPlayer.GetShot(row, column);
-            HumanPlayer.ChangeEnemyGrid(row, column, isHit);
+            (isHit, isSink, isWin) = computerPlayer.GetShot(row, column);
+            humanPlayer.ChangeEnemyGrid(row, column, isHit);
 
             if (isSink)
             {
@@ -156,10 +170,10 @@ namespace Battleships.GameModes
         private (bool, bool) ComputerTurn()
         {
             int row, column;
-            (row, column) = ComputerPlayer.Attack();
+            (row, column) = computerPlayer.Attack();
             bool isHit, isSink, isWin;
-            (isHit, isSink, isWin) = HumanPlayer.GetShot(row, column);
-            ComputerPlayer.ChangeEnemyGrid(row, column, isHit);
+            (isHit, isSink, isWin) = humanPlayer.GetShot(row, column);
+            computerPlayer.ChangeEnemyGrid(row, column, isHit);
 
             if (isSink)
             {
@@ -173,7 +187,7 @@ namespace Battleships.GameModes
             }
             else
             {
-                Console.WriteLine($"This dumb computer shoots {IntToChar(row)}{column} and misses.");
+                Console.WriteLine($"The computer shoots {IntToChar(row)}{column} and misses.");
             }
 
             return (isHit, !isWin);
