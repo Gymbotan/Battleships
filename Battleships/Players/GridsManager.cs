@@ -96,12 +96,6 @@ namespace Battleships.Players
                 {
                     Ships[HittedShipIndex - 1].IsAlive = false;
                     isDead = true;
-                    //int num = 1;
-                    //foreach (Ship sh in Ships)
-                    //{
-                    //    Console.WriteLine($"Ship {num++} - is alive? {sh.IsAlive}.");
-                    //}
-                    //Console.WriteLine(Ships.All(s => !s.IsAlive));
                 }
 
                 if (Ships.All(s => !s.IsAlive))
@@ -154,7 +148,6 @@ namespace Battleships.Players
                     ownGrid[i - 1, column1 - 1] = '#';
                 }
             }
-            //Console.WriteLine("ship is set");
             Ships[shipIndex - 1].IsSet = true;
         }
 
@@ -167,8 +160,6 @@ namespace Battleships.Players
             ShowGrid(ownGrid);
             Console.WriteLine("\nIt is a current situation of enemy's grid:");
             ShowGrid(enemyGrid);
-            //Console.WriteLine("\nIt is a current situation of enemy's grid:");
-            //ShowGrid(shipsPlacement);
         }
 
         /// <summary>
@@ -201,40 +192,12 @@ namespace Battleships.Players
             Console.WriteLine("  -------------");
         }
 
-        //private void ShowGrid(int[,] grid)
-        //{
-        //    Console.WriteLine("   12345678910");
-        //    Console.WriteLine("  _____________");
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        char ch = (char)('A' + i);
-        //        Console.Write($" {ch}|");
-        //        for (int j = 0; j < 10; j++)
-        //        {
-        //            Console.Write($"{grid[i, j]}");
-        //            //if (grid[i, j] == '@')
-        //            //{
-        //            //    Console.ForegroundColor = ConsoleColor.Red;
-        //            //    Console.Write($"{grid[i, j]}", Console.ForegroundColor);
-        //            //    Console.ResetColor();
-        //            //}
-        //            //else
-        //            //{
-        //            //    Console.Write($"{grid[i, j]}");
-        //            //}
-        //        }
-        //        Console.WriteLine(" |");
-        //    }
-        //    Console.WriteLine("  -------------");
-        //}
-
         /// <summary>
         /// Check is this player ready to play (are all the ships placed on the grid.).
         /// </summary>
         /// <returns>Is ready or no.</returns>
         public bool IsReadyToPlay()
         {
-            //Console.WriteLine(Ships.All(x => x.IsSet));
             return Ships.All(x => x.IsSet);
         }
 

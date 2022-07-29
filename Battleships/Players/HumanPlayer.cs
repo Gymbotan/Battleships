@@ -7,32 +7,59 @@ using System.Threading.Tasks;
 
 namespace Battleships.Players
 {
-    class HumanPlayer : IPlayer
+    /// <summary>
+    /// Class human player.
+    /// </summary>
+    public class HumanPlayer : IPlayer
     {
+        /// <summary>
+        /// Grids manager.
+        /// </summary>
         public GridsManager gridsManager { get; }
 
+        /// <summary>
+        /// Create object of HumanPlayer.
+        /// </summary>
         public HumanPlayer()
         {
             gridsManager = new GridsManager();
         }
 
-
+        /// <summary>
+        /// Choose coordinates to fire opponent.
+        /// </summary>
+        /// <returns>Coordinates you want to fire.</returns>
         public (int, int) Attack()
         {
             Console.WriteLine("\nInput coordinates you want to attack (from a1 to j10) or 'position' to see grids:");
             return InputCoordinates();
         }
 
+        /// <summary>
+        /// Change enemy grid after getting results of your attack.
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="column">Column.</param>
+        /// <param name="isHit">Is hit.</param>
         public void ChangeEnemyGrid(int row, int column, bool isHit)
         {
             gridsManager.ChangeEnemyGrid(row, column, isHit);
         }
 
+        /// <summary>
+        /// Reaction on getting shot.
+        /// </summary>
+        /// <param name="row">Row the enemy fired.</param>
+        /// <param name="column">Column the enemy fired.</param>
+        /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
         public (bool, bool, bool) GetShot(int row, int column)
         {
             return gridsManager.GetShot(row, column);
         }
 
+        /// <summary>
+        /// Set ships on the grid.
+        /// </summary>
         public void SetShips()
         {
             bool isRunning = true;
@@ -218,11 +245,18 @@ namespace Battleships.Players
             _ => throw new ArgumentOutOfRangeException(nameof(ch)),
         };
 
+        /// <summary>
+        /// Check is this player ready to play (are all the ships placed on the grid.).
+        /// </summary>
+        /// <returns></returns>
         public bool isReadyToPlay()
         {
             return gridsManager.IsReadyToPlay();
         }
 
+        /// <summary>
+        /// Delete all the ships from your grid.
+        /// </summary>
         public void DeleteShips()
         {
             gridsManager.DeleteShips();

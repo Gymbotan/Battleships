@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable CS0168
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +7,28 @@ using System.Threading.Tasks;
 
 namespace Battleships.Players
 {
+    /// <summary>
+    /// Class computer player.
+    /// </summary>
     public class ComputerPlayer : IPlayer
     {
+        /// <summary>
+        /// Grids manager.
+        /// </summary>
         public GridsManager gridsManager { get; }
 
+        /// <summary>
+        /// Create object of ComputerPlayer.
+        /// </summary>
         public ComputerPlayer()
         {
             gridsManager = new GridsManager();
         }
 
+        /// <summary>
+        /// Choose coordinates to fire opponent.
+        /// </summary>
+        /// <returns>Coordinates you want to fire.</returns>
         public (int, int) Attack()
         {
             Random rnd = new();
@@ -30,16 +44,31 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Change enemy grid after getting results of your attack.
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="column">Column.</param>
+        /// <param name="isHit">Is hit.</param>
         public void ChangeEnemyGrid(int row, int column, bool isHit)
         {
             gridsManager.ChangeEnemyGrid(row, column, isHit);
         }
 
+        /// <summary>
+        /// Reaction on getting shot.
+        /// </summary>
+        /// <param name="row">Row the enemy fired.</param>
+        /// <param name="column">Column the enemy fired.</param>
+        /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
         public (bool, bool, bool) GetShot(int row, int column)
         {
             return gridsManager.GetShot(row, column);
         }
 
+        /// <summary>
+        /// Set ships on the grid.
+        /// </summary>
         public void SetShips()
         {
             gridsManager.DeleteShips();
@@ -49,7 +78,6 @@ namespace Battleships.Players
                 gridsManager.Ships[i].IsSet = true;
             }
         }
-
 
         /// <summary>
         /// Randomly choose place for a ship.
@@ -87,15 +115,9 @@ namespace Battleships.Players
                                 }
                                 catch(Exception ex)
                                 {
-                                    //Console.WriteLine(ex.Message);
                                     // just do nothing
                                 }
 
-                                //if (IsPossibleToSetShip(row1 + 1, column1 + 1, row2 + 1, column1 + 1))
-                                //{
-                                //    SetShipVertical(row1, row2, column1, shipNumber);
-                                //    isSet = true;
-                                //}
                                 break;
                             }
                         case 2: // down
@@ -113,14 +135,9 @@ namespace Battleships.Players
                                 }
                                 catch (Exception ex)
                                 {
-                                    //Console.WriteLine(ex.Message);
                                     // just do nothing
                                 }
-                                //if (IsPossibleToSetShip(row1 + 1, column1 + 1, row2 + 1, column1 + 1))
-                                //{
-                                //    SetShipVertical(row1, row2, column1, shipNumber);
-                                //    isSet = true;
-                                //}
+                                
                                 break;
                             }
                         case 3: // left
@@ -138,15 +155,9 @@ namespace Battleships.Players
                                 }
                                 catch (Exception ex)
                                 {
-                                    //Console.WriteLine(ex.Message);
                                     // just do nothing
                                 }
 
-                                //if (IsPossibleToSetShip(row1 + 1, column1 + 1, row1 + 1, column2 + 1))
-                                //{
-                                //    SetShipHorizontal(row1, column1, column2, shipNumber);
-                                //    isSet = true;
-                                //}
                                 break;
                             }
                         case 4: // right
@@ -164,14 +175,9 @@ namespace Battleships.Players
                                 }
                                 catch (Exception ex)
                                 {
-                                    //Console.WriteLine(ex.Message);// just do nothing
+                                    // just do nothing
                                 }
 
-                                //if (IsPossibleToSetShip(row1 + 1, column1 + 1, row1 + 1, column2 + 1))
-                                //{
-                                //    SetShipHorizontal(row1, column1, column2, shipNumber);
-                                //    isSet = true;
-                                //}
                                 break;
                             }
                     }
@@ -179,16 +185,26 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Show how own and enemy's grids look like.
+        /// </summary>
         public void ShowGrids()
         {
             gridsManager.ShowGrids();
         }
 
+        /// <summary>
+        /// Check is this player ready to play (are all the ships placed on the grid.).
+        /// </summary>
+        /// <returns>Is ready or not.</returns>
         public bool isReadyToPlay()
         {
             return gridsManager.IsReadyToPlay();
         }
 
+        /// <summary>
+        /// Delete all the ships from your grid.
+        /// </summary>
         public void DeleteShips()
         {
             gridsManager.DeleteShips();

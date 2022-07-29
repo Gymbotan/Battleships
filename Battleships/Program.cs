@@ -10,12 +10,13 @@ namespace Battleships
         static void Main(string[] args)
         {
             Console.WriteLine("The game Battleships is greeting you!");
-            Console.WriteLine("Press 's' to start a new game");
-            Console.WriteLine("Press 'h' to see a help");
-            Console.WriteLine("Press 'q' to quit application");
             bool isGameRunning = true;
             while (isGameRunning)
             {
+                Console.WriteLine("Press 's' to start a new game");
+                Console.WriteLine("Press 'h' to see a help");
+                Console.WriteLine("Press 'q' to quit application");
+            
                 char button = Console.ReadKey(true).KeyChar;
                 ClickHandling(ref isGameRunning, button);
             }
@@ -34,7 +35,6 @@ namespace Battleships
             {
                 case 's':
                 case 'S':
-                    //Console.WriteLine("\nThe game is started\n");
                     Console.WriteLine();
                     var game = new StandardGame();
                     game.Prepare();
@@ -46,7 +46,12 @@ namespace Battleships
                     break;
                 case 'h':
                 case 'H':
-                    Console.WriteLine("\nIt is a help.\n");
+                    Console.WriteLine("\nIt is a help.");
+                    Console.WriteLine("To start a game you should press 's'.");
+                    Console.WriteLine("Then you should press 'p' and place all your ships on the grid one by one (pressing 'p' and inputing coordinates).");
+                    Console.WriteLine("After that you should press 's' again to begin.");
+                    Console.WriteLine("Each turn you should input coordinates you want to fire until you'll miss.");
+                    Console.WriteLine("When you sink all computer's ships (or it will destroy yours) the game will over.\n");
                     break;
                 default:
                     Console.WriteLine("\nUnknown command. please try again.\n");
