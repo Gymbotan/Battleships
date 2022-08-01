@@ -152,6 +152,18 @@ namespace Battleships.Players
         }
 
         /// <summary>
+        /// Return own grid.
+        /// </summary>
+        /// <returns>Own grid.</returns>
+        public char[,] GetOwnGrid() => ownGrid;
+
+        /// <summary>
+        /// Return enemy grid.
+        /// </summary>
+        /// <returns>Enemy grid.</returns>
+        public char[,] GetEnemyGrid() => enemyGrid;
+
+        /// <summary>
         /// Show how own and enemy's grids look like.
         /// </summary>
         public void ShowGrids()

@@ -175,6 +175,9 @@ namespace Battleships.Players
             }
         }
 
+        /// <summary>
+        /// Show grids.
+        /// </summary>
         public void ShowGrids()
         {
             gridsManager.ShowGrids();
