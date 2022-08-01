@@ -57,6 +57,11 @@ namespace Battleships.Players
                     shipsPlacement[i, j] = 0;
                 }
             }
+
+            for (int i = 0; i < Ships.Length; i++)
+            {
+                Ships[i].IsSet = false;
+            }
         }
 
         /// <summary>
@@ -117,9 +122,33 @@ namespace Battleships.Players
                 throw new ArgumentOutOfRangeException(nameof(shipIndex), $"ShipIndex should be between 1 and {Ships.Length}.");
             }
 
+            if (Ships[shipIndex - 1].IsSet)
+            {
+                throw new ArgumentException("This ship is already set.");
+            }
+
+            if (row1 < 1 || row1 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(row1));
+            }
+
+            if (column1 < 1 || column1 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(column1));
+            }
+            if (row2 < 1 || row2 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(row2));
+            }
+
+            if (column2 < 1 || column2 > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(column2));
+            }
+
             if (row1 != row2 && column1 != column2)
             {
-                throw new ArgumentException("A ship should have the same row or the same column");
+                throw new ArgumentException("A ship should have the same row or the same column.");
             }
 
             if (Math.Abs (row1 - row2) + Math.Abs(column1 - column2) != Ships[shipIndex - 1].Size - 1)
@@ -162,6 +191,12 @@ namespace Battleships.Players
         /// </summary>
         /// <returns>Enemy grid.</returns>
         public char[,] GetEnemyGrid() => enemyGrid;
+
+        /// <summary>
+        /// Return ships placement.
+        /// </summary>
+        /// <returns>Ships placement.</returns>
+        public int[,] GetShipsPlacement() => shipsPlacement;
 
         /// <summary>
         /// Show how own and enemy's grids look like.
