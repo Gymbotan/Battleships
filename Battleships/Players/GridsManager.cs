@@ -203,9 +203,9 @@ namespace Battleships.Players
         /// </summary>
         public void ShowGrids()
         {
-            Console.WriteLine("\nIt is a current situation of your grid:");
+            Console.WriteLine("\nIt is a current situation of your grid:\n");
             ShowGrid(ownGrid);
-            Console.WriteLine("\nIt is a current situation of enemy's grid:");
+            Console.WriteLine("\nIt is a current situation of enemy's grid:\n");
             ShowGrid(enemyGrid);
         }
 

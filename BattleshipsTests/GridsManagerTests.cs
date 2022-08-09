@@ -124,7 +124,7 @@ namespace BattleshipsTests
         [TestCase(6, -1, 6, 2)]
         [TestCase(4, -1, 4, -5)]
         [TestCase(3, 13, 6, 13)]
-        public void IsPossibleToSetShip_SetShipOutOfGrid_ThrowArgumentException(int row1, int column1, int row2, int column2)
+        public void IsPossibleToSetShip_SetShipOutOfGrid_ThrowArgumentOutOfRangeException(int row1, int column1, int row2, int column2)
         {
             GridsManager manager = new();
             Assert.Throws<ArgumentOutOfRangeException>(() => manager.IsPossibleToSetShip(row1, column1, row2, column2));
@@ -189,6 +189,16 @@ namespace BattleshipsTests
             Assert.AreEqual(expected, manager.IsReadyToPlay());
         }
 
+        [TestCase(11, 1)]
+        [TestCase(-1, 3)]
+        [TestCase(2, 11)]
+        [TestCase(6, -1)]
+        public void GetShot_ShotOutOfGrid_ThrowArgumentOutOfRangeException(int row, int column)
+        {
+            GridsManager manager = new();
+            Assert.Throws<ArgumentOutOfRangeException>(() => manager.GetShot(row, column));
+        }
+
         [TestCaseSource(typeof(TestCasesDataSource), nameof(TestCasesDataSource.TestCasesForGetShotting))]
         public void GetShot_CorrectResultReturn(int row, int column, (bool, bool, bool) expected)
         {
@@ -236,6 +246,16 @@ namespace BattleshipsTests
             manager.GetShot(row2, column2);
             manager.GetShot(row3, column3);
             Assert.AreEqual(expected, manager.GetOwnGrid());
+        }
+
+        [TestCaseSource(typeof(TestCasesDataSource), nameof(TestCasesDataSource.TestCasesForChangeEnemyGrid))]
+        public void ChangeEnemyGrid_CorrectGridChanging(int row1, int column1, bool isHit1, int row2, int column2, bool isHit2, int row3, int column3, bool isHit3, char[,] expected)
+        {
+            GridsManager manager = new();
+            manager.ChangeEnemyGrid(row1, column1, isHit1);
+            manager.ChangeEnemyGrid(row2, column2, isHit2);
+            manager.ChangeEnemyGrid(row3, column3, isHit3);
+            Assert.AreEqual(expected, manager.GetEnemyGrid());
         }
     }
 }

@@ -62,10 +62,11 @@ namespace Battleships.Players
         /// </summary>
         public void SetShips()
         {
+            Console.Clear();
             bool isRunning = true;
             while (isRunning)
             {
-                Console.WriteLine("\nPress 'p' to place new ship,\npress 'v' to view current ships' positions," +
+                Console.WriteLine("\nPress 'p' to place a new ship,\npress 'v' to view current ships' positions," +
                     "\npress 'd' to delete all the ship from your grid, \npress 'q' to stop ship placing.");
                 char button = Console.ReadKey(true).KeyChar;
                 switch (button)
@@ -111,7 +112,7 @@ namespace Battleships.Players
 
             while (true)
             {
-                Console.WriteLine("\nPlease enter a number of the ship you want to set (or 'r' to return to previous menu)");
+                Console.WriteLine("\nPlease enter aт index number of a ship you want to set (or 'r' to return to previous menu)");
                 var input = Console.ReadLine();
 
                 if (input == "r" || input == "R")
@@ -184,7 +185,7 @@ namespace Battleships.Players
         }
 
         /// <summary>
-        /// Allow to input coordinates of place (like a1 of c5).
+        /// Allow to input coordinates of place (like a1 or c5).
         /// </summary>
         /// <returns></returns>
         private (int, int) InputCoordinates()

@@ -15,7 +15,6 @@ namespace Battleships.GameModes
         private readonly IPlayer humanPlayer;
         private readonly IPlayer computerPlayer;
 
-
         /// <summary>
         /// Create a new object of StandardGame.
         /// </summary>
@@ -35,13 +34,14 @@ namespace Battleships.GameModes
                 computerPlayer.SetShips();
             }
 
-            Console.WriteLine("To start the game you should place all your chips on the grid.\n");
+            Console.Clear();
+            Console.WriteLine("To start the game you should place all your chips on the grid.");
 
             bool isRunning = true;
 
             while (isRunning)
             {
-                Console.WriteLine("\nPress 'p' to place ships,\npress 'v' to view current ships' positions,\npress 'd' to delete all the ship from your grid, " +
+                Console.WriteLine("\nPress 'p' to begin to place your ships on the grid,\npress 'v' to view current ships' positions,\npress 'd' to delete all the ship from your grid, " +
                     "\npress 's' to start the game, \npress 'q' to quit the game.");
                 char button = Console.ReadKey(true).KeyChar;
 
@@ -65,6 +65,7 @@ namespace Battleships.GameModes
                 case 'S':
                     if (humanPlayer.isReadyToPlay())
                     {
+                        Console.Clear();
                         Console.WriteLine("\nLet the game begin!\n");
                         Start();
                         isRunning = false;
@@ -98,15 +99,14 @@ namespace Battleships.GameModes
         /// </summary>
         private void Start()
         {
-            Console.WriteLine("The game is begin!!!");
-
             bool isGameRunning = true;
             bool isPlayerWin = true;
             int turn = 0;
-            //computerPlayer.ShowGrids();// to see computers ships
+            //computerPlayer.ShowGrids(); // to see computer's ships
             while (isGameRunning)
             {
                 turn++;
+                Console.WriteLine($"--------------   Turn {(turn + 1) /2}   ----------------");
                 if (turn % 2 == 1)
                 {
                     Console.WriteLine("\nIt is your turn to fire.");
@@ -156,7 +156,7 @@ namespace Battleships.GameModes
 
             if (isSink)
             {
-                Console.WriteLine("Ha-Ha you sink enemy's ship!!! Let's repeat!");
+                Console.WriteLine("Ha-Ha you sink enemy's ship!!! Let's repeat it!");
             }
             else if (isHit)
             {
@@ -164,7 +164,7 @@ namespace Battleships.GameModes
             }
             else
             {
-                Console.WriteLine("Unfortunately you miss. It's enemy turn.");
+                Console.WriteLine("Unfortunately you miss. It's enemy turn.\n");
             }
 
 
@@ -186,16 +186,16 @@ namespace Battleships.GameModes
             if (isSink)
             {
                 Console.WriteLine($"Unfortunately enemy fires {IntToChar(row)}{column} and sinks our ship (((  Now he shoots again.");
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(1500);
             }
             else if (isHit)
             {
                 Console.WriteLine($"Enemy strikes {IntToChar(row)}{column} and hits our ship ( Now he fires one more time.");
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(1500);
             }
             else
             {
-                Console.WriteLine($"The computer shoots {IntToChar(row)}{column} and misses.");
+                Console.WriteLine($"The computer shoots {IntToChar(row)}{column} and misses.\n");
             }
 
             return (isHit, !isWin);
