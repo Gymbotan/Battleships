@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Battleships.Players
+namespace Battleships.Entities
 {
     public class GridsManager
     {
@@ -36,12 +36,11 @@ namespace Battleships.Players
         /// <summary>
         /// Changing of enemy grid after getting results of your attack.
         /// </summary>
-        /// <param name="row">row you fired.</param>
-        /// <param name="column">column you fired.</param>
+        /// <param name="coordinate">Coordinate you fired.</param>
         /// <param name="isHit">result of attack.</param>
-        public void ChangeEnemyGrid(int row, int column, bool isHit)
+        public void ChangeEnemyGrid(Coordinate coordinate, bool isHit)
         {
-            enemyGrid[row - 1, column - 1] = (isHit || enemyGrid[row - 1, column - 1] == '@') ? '@' : '·';
+            enemyGrid[coordinate.Row - 1, coordinate.Column - 1] = (isHit || enemyGrid[coordinate.Row - 1, coordinate.Column - 1] == '@') ? '@' : '·';
         }
 
         /// <summary>
@@ -67,26 +66,22 @@ namespace Battleships.Players
         /// <summary>
         /// Reaction on getting shot.
         /// </summary>
-        /// <param name="row">row the enemy fired.</param>
-        /// <param name="column">column the enemy fired.</param>
+        /// <param name="coordinate">Coordinate the enemy fired.</param>
         /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
-        public (bool, bool, bool) GetShot(int row, int column)
+        public (bool, bool, bool) GetShot(Coordinate coordinate)
         {
-            if (row < 1 || row > 10)
+            if (coordinate.Row < 1 || coordinate.Row > 10 || coordinate.Column < 1 || coordinate.Column > 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(row));
+                throw new ArgumentOutOfRangeException(nameof(coordinate));
             }
-            if (column < 1 || column > 10)
-            {
-                throw new ArgumentOutOfRangeException(nameof(column));
-            }
-
+            
             bool isHit = false;
             bool isDead = false;
             bool isLose = false;
-            int HittedShipIndex = shipsPlacement[row - 1, column - 1];
+            int HittedShipIndex = shipsPlacement[coordinate.Row - 1, coordinate.Column - 1];
 
-            ownGrid[row - 1, column - 1] = (shipsPlacement[row - 1, column - 1] > 0 || ownGrid[row - 1, column - 1] == '@') ? '@' : '·';
+            ownGrid[coordinate.Row - 1, coordinate.Column - 1] = (shipsPlacement[coordinate.Row - 1, coordinate.Column - 1] > 0 
+                || ownGrid[coordinate.Row - 1, coordinate.Column - 1] == '@') ? '@' : '·';
 
             if (HittedShipIndex <= 0)
             {
@@ -94,7 +89,7 @@ namespace Battleships.Players
             }
             else
             {
-                shipsPlacement[row - 1, column - 1] = -1;
+                shipsPlacement[coordinate.Row - 1, coordinate.Column - 1] = -1;
                 isHit = true;
                 Ships[HittedShipIndex - 1].Holes++;
                 if (Ships[HittedShipIndex - 1].Holes == Ships[HittedShipIndex - 1].Size)
@@ -115,7 +110,10 @@ namespace Battleships.Players
         /// <summary>
         /// Set (place) a ship on player's grid.
         /// </summary>
-        public void SetShip(int shipIndex, int row1, int column1, int row2, int column2)
+        /// <param name="shipIndex">Ship's index.</param>
+        /// <param name="coordinate1">Coordinate1 (one ship's endpoint)</param>
+        /// <param name="coordinate2">Coordinate2 (another ship's endpoint)</param>
+        public void SetShip(int shipIndex, Coordinate coordinate1, Coordinate coordinate2)
         {
             if (shipIndex < 1 || shipIndex > Ships.Length)
             {
@@ -127,76 +125,49 @@ namespace Battleships.Players
                 throw new ArgumentException("This ship is already set.");
             }
 
-            if (row1 < 1 || row1 > 10)
+            if (coordinate1.Row < 1 || coordinate1.Row > 10 || coordinate1.Column < 1 || coordinate1.Column > 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(row1));
+                throw new ArgumentOutOfRangeException(nameof(coordinate1));
             }
 
-            if (column1 < 1 || column1 > 10)
+            if (coordinate2.Row < 1 || coordinate2.Row > 10 || coordinate2.Column < 1 || coordinate2.Column > 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(column1));
-            }
-            if (row2 < 1 || row2 > 10)
-            {
-                throw new ArgumentOutOfRangeException(nameof(row2));
+                throw new ArgumentOutOfRangeException(nameof(coordinate2));
             }
 
-            if (column2 < 1 || column2 > 10)
-            {
-                throw new ArgumentOutOfRangeException(nameof(column2));
-            }
-
-            if (row1 != row2 && column1 != column2)
+            if (coordinate1.Row != coordinate2.Row && coordinate1.Column != coordinate2.Column)
             {
                 throw new ArgumentException("A ship should have the same row or the same column.");
             }
 
-            if (Math.Abs (row1 - row2) + Math.Abs(column1 - column2) != Ships[shipIndex - 1].Size - 1)
+            if (Math.Abs(coordinate1.Row - coordinate2.Row) + Math.Abs(coordinate1.Column - coordinate2.Column) != Ships[shipIndex - 1].Size - 1)
             {
                 throw new ArgumentException("This ship has different size.");
             }
 
-            if (!IsPossibleToSetShip(row1, column1, row2, column2))
+            if (!IsPossibleToSetShip(coordinate1, coordinate2))
             {
                 throw new ArgumentException("You can not place your ship here. You collide with another ship. please try again.");
             }
 
-            if (row1 == row2)
+            if (coordinate1.Row == coordinate2.Row)
             {
-                for (int i = Math.Min(column1, column2); i <= Math.Max(column1, column2); i++)
+                for (int i = Math.Min(coordinate1.Column, coordinate2.Column); i <= Math.Max(coordinate1.Column, coordinate2.Column); i++)
                 {
-                    shipsPlacement[row1 - 1, i - 1] = shipIndex;
-                    ownGrid[row1 - 1, i - 1] = '#';
+                    shipsPlacement[coordinate1.Row - 1, i - 1] = shipIndex;
+                    ownGrid[coordinate1.Row - 1, i - 1] = '#';
                 }
             }
-            else 
+            else
             {
-                for (int i = Math.Min(row1, row2); i <= Math.Max(row1, row2); i++)
+                for (int i = Math.Min(coordinate1.Row, coordinate2.Row); i <= Math.Max(coordinate1.Row, coordinate2.Row); i++)
                 {
-                    shipsPlacement[i - 1, column1 - 1] = shipIndex;
-                    ownGrid[i - 1, column1 - 1] = '#';
+                    shipsPlacement[i - 1, coordinate1.Column - 1] = shipIndex;
+                    ownGrid[i - 1, coordinate1.Column - 1] = '#';
                 }
             }
             Ships[shipIndex - 1].IsSet = true;
         }
-
-        /// <summary>
-        /// Return own grid.
-        /// </summary>
-        /// <returns>Own grid.</returns>
-        public char[,] GetOwnGrid() => ownGrid;
-
-        /// <summary>
-        /// Return enemy grid.
-        /// </summary>
-        /// <returns>Enemy grid.</returns>
-        public char[,] GetEnemyGrid() => enemyGrid;
-
-        /// <summary>
-        /// Return ships placement.
-        /// </summary>
-        /// <returns>Ships placement.</returns>
-        public int[,] GetShipsPlacement() => shipsPlacement;
 
         /// <summary>
         /// Show how own and enemy's grids look like.
@@ -248,41 +219,40 @@ namespace Battleships.Players
             return Ships.All(x => x.IsSet);
         }
 
-        public bool IsPossibleToSetShip(int row1, int column1, int row2, int column2)
+        /// <summary>
+        /// Check is is posiible to place a ship in choosen coorddinates.
+        /// </summary>
+        /// <param name="coordinate1">Coordinate1 (one ship's endpoint).</param>
+        /// <param name="coordinate2">Coordinate2 (another ship's endpoint).</param>
+        /// <returns></returns>
+        public bool IsPossibleToSetShip(Coordinate coordinate1, Coordinate coordinate2)
         {
-            if (row1 < 1 || row1 > 10)
+            if (coordinate1.Row < 1 || coordinate1.Row > 10 || coordinate1.Column < 1 || coordinate1.Column > 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(row1));
+                throw new ArgumentOutOfRangeException(nameof(coordinate1));
             }
-            if (column1 < 1 || column1 > 10)
+            
+            if (coordinate2.Row < 1 || coordinate2.Row > 10 || coordinate2.Column < 1 || coordinate2.Column > 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(column1));
+                throw new ArgumentOutOfRangeException(nameof(coordinate2));
             }
-            if (row2 < 1 || row2 > 10)
+            
+            if (coordinate1.Row == coordinate2.Row)
             {
-                throw new ArgumentOutOfRangeException(nameof(row2));
-            }
-            if (column2 < 1 || column2 > 10)
-            {
-                throw new ArgumentOutOfRangeException(nameof(column2));
-            }
-
-            if (row1 == row2)
-            {
-                for (int i = Math.Min(column1, column2); i <= Math.Max(column1, column2); i++)
+                for (int i = Math.Min(coordinate1.Column, coordinate2.Column); i <= Math.Max(coordinate1.Column, coordinate2.Column); i++)
                 {
-                    if (shipsPlacement[row1 - 1, i - 1] != 0)
+                    if (shipsPlacement[coordinate1.Row - 1, i - 1] != 0)
                     {
                         return false;
                     }
                 }
                 return true;
             }
-            else if (column1 == column2)
+            else if (coordinate1.Column == coordinate2.Column)
             {
-                for (int i = Math.Min(row1, row2); i <= Math.Max(row1, row2); i++)
+                for (int i = Math.Min(coordinate1.Row, coordinate2.Row); i <= Math.Max(coordinate1.Row, coordinate2.Row); i++)
                 {
-                    if (shipsPlacement[i - 1, column1 - 1] != 0)
+                    if (shipsPlacement[i - 1, coordinate1.Column - 1] != 0)
                     {
                         return false;
                     }
@@ -293,9 +263,14 @@ namespace Battleships.Players
                 return false; // remove
         }
 
-        public bool isSquareFired (int row, int column)
+        /// <summary>
+        /// Check is this square's coordinate was shooted previously.
+        /// </summary>
+        /// <param name="coordinate">Coordinate.</param>
+        /// <returns>Was shooted or not.</returns>
+        public bool isSquareFired (Coordinate coordinate)
         {
-            return enemyGrid[row - 1, column - 1] != ' ';
+            return enemyGrid[coordinate.Row - 1, coordinate.Column - 1] != ' ';
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Battleships.Players;
+﻿using Battleships.Entities;
+using Battleships.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,11 +149,10 @@ namespace Battleships.GameModes
         /// <returns>Result of attack (is hit, is game finished).</returns>
         private (bool, bool) PlayerTurn()
         {
-            int row, column;
-            (row, column) = humanPlayer.Attack();
+            Coordinate coordinate = humanPlayer.Attack();
             bool isHit, isSink, isWin;
-            (isHit, isSink, isWin) = computerPlayer.GetShot(row, column);
-            humanPlayer.ChangeEnemyGrid(row, column, isHit);
+            (isHit, isSink, isWin) = computerPlayer.GetShot(coordinate);
+            humanPlayer.ChangeEnemyGrid(coordinate, isHit);
 
             if (isSink)
             {
@@ -177,25 +177,24 @@ namespace Battleships.GameModes
         /// <returns>Result of attack (is hit, is game finished).</returns>
         private (bool, bool) ComputerTurn()
         {
-            int row, column;
-            (row, column) = computerPlayer.Attack();
+            Coordinate coordinate = computerPlayer.Attack();
             bool isHit, isSink, isWin;
-            (isHit, isSink, isWin) = humanPlayer.GetShot(row, column);
-            computerPlayer.ChangeEnemyGrid(row, column, isHit);
+            (isHit, isSink, isWin) = humanPlayer.GetShot(coordinate);
+            computerPlayer.ChangeEnemyGrid(coordinate, isHit);
             
             if (isSink)
             {
-                Console.WriteLine($"Unfortunately enemy fires {IntToChar(row)}{column} and sinks our ship (((  Now he shoots again.");
+                Console.WriteLine($"Unfortunately enemy fires {IntToChar(coordinate.Row)}{coordinate.Column} and sinks our ship (((  Now he shoots again.");
                 System.Threading.Thread.Sleep(1500);
             }
             else if (isHit)
             {
-                Console.WriteLine($"Enemy strikes {IntToChar(row)}{column} and hits our ship ( Now he fires one more time.");
+                Console.WriteLine($"Enemy strikes {IntToChar(coordinate.Row)}{coordinate.Column} and hits our ship ( Now he fires one more time.");
                 System.Threading.Thread.Sleep(1500);
             }
             else
             {
-                Console.WriteLine($"The computer shoots {IntToChar(row)}{column} and misses.\n");
+                Console.WriteLine($"The computer shoots {IntToChar(coordinate.Row)}{coordinate.Column} and misses.\n");
             }
 
             return (isHit, !isWin);

@@ -42,6 +42,7 @@ namespace Battleships
                     break;
                 case 'q':
                 case 'Q':
+                    Console.Clear();
                     isGameRunning = false;
                     break;
                 case 'h':

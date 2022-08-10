@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS0168
+using Battleships.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Battleships.Players
         /// Choose coordinates to fire opponent.
         /// </summary>
         /// <returns>Coordinates you want to fire.</returns>
-        public (int, int) Attack()
+        public Coordinate Attack()
         {
             Random rnd = new();
             int row, column;
@@ -37,9 +38,10 @@ namespace Battleships.Players
             {
                 row = rnd.Next(1, 10);
                 column = rnd.Next(1, 10);
-                if (!gridsManager.isSquareFired(row, column))
+                Coordinate coordinate = new Coordinate(row, column);
+                if (!gridsManager.isSquareFired(coordinate))
                 {
-                    return (row, column);
+                    return new Coordinate(row, column);
                 }
             }
         }
@@ -47,23 +49,21 @@ namespace Battleships.Players
         /// <summary>
         /// Change enemy grid after getting results of your attack.
         /// </summary>
-        /// <param name="row">Row.</param>
-        /// <param name="column">Column.</param>
+        /// <param name="coordinate">Coordinate.</param>
         /// <param name="isHit">Is hit.</param>
-        public void ChangeEnemyGrid(int row, int column, bool isHit)
+        public void ChangeEnemyGrid(Coordinate coordinate, bool isHit)
         {
-            gridsManager.ChangeEnemyGrid(row, column, isHit);
+            gridsManager.ChangeEnemyGrid(coordinate, isHit);
         }
 
         /// <summary>
         /// Reaction on getting shot.
         /// </summary>
-        /// <param name="row">Row the enemy fired.</param>
-        /// <param name="column">Column the enemy fired.</param>
+        /// <param name="coordinate">Coordinate.</param>
         /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
-        public (bool, bool, bool) GetShot(int row, int column)
+        public (bool, bool, bool) GetShot(Coordinate coordinate)
         {
-            return gridsManager.GetShot(row, column);
+            return gridsManager.GetShot(coordinate);
         }
 
         /// <summary>
@@ -91,8 +91,7 @@ namespace Battleships.Players
             {
                 // we choose a random point on the grid. It will be initial endpoint of the ship
                 Random rnd = new();
-                int row1 = rnd.Next(1, 10);
-                int column1 = rnd.Next(1, 10);
+                Coordinate coordinate1 = new Coordinate(rnd.Next(1, 10), rnd.Next(1, 10));
                 int row2, column2;
                 int count = 0;
                 while (!isSet && count < 5) // if we can not set (place) the ship, maybe it is imposiible. Let's choose a new initial point
@@ -101,81 +100,81 @@ namespace Battleships.Players
                     switch (rnd.Next(1, 4)) // we randomly choose direction where to set the ship from initial point
                     {
                         case 1: // up
-                            if (row1 - shipSize + 1 < 1)
+                            if (coordinate1.Row - shipSize + 1 < 1)
                             {
                                 break;
                             }
                             else
                             {
-                                row2 = row1 - shipSize + 1;
+                                row2 = coordinate1.Row - shipSize + 1;
                                 try
                                 {
-                                    gridsManager.SetShip(shipNumber, row1, column1, row2, column1);
+                                    gridsManager.SetShip(shipNumber, coordinate1, new Coordinate(row2, coordinate1.Column));
                                     isSet = true;
                                 }
                                 catch(Exception ex)
                                 {
-                                    // just do nothing
+                                    // just do nothing not to crash the application.
                                 }
 
                                 break;
                             }
                         case 2: // down
-                            if (row1 + shipSize - 1 > 10)
+                            if (coordinate1.Row + shipSize - 1 > 10)
                             {
                                 break;
                             }
                             else
                             {
-                                row2 = row1 + shipSize - 1;
+                                row2 = coordinate1.Row + shipSize - 1;
                                 try
                                 {
-                                    gridsManager.SetShip(shipNumber, row1, column1, row2, column1);
+                                    gridsManager.SetShip(shipNumber, coordinate1, new Coordinate(row2, coordinate1.Column));
                                     isSet = true;
                                 }
                                 catch (Exception ex)
                                 {
-                                    // just do nothing
+                                    // just do nothing not to crash the application.
                                 }
-                                
+
                                 break;
                             }
                         case 3: // left
-                            if (column1 - shipSize + 1 < 1)
+                            if (coordinate1.Column - shipSize + 1 < 1)
                             {
                                 break;
                             }
                             else
                             {
-                                column2 = column1 - shipSize + 1;
+                                column2 = coordinate1.Column - shipSize + 1;
                                 try
                                 {
-                                    gridsManager.SetShip(shipNumber, row1, column1, row1, column2);
+                                    gridsManager.SetShip(shipNumber, coordinate1, new Coordinate (coordinate1.Row, column2));
                                     isSet = true;
                                 }
                                 catch (Exception ex)
                                 {
-                                    // just do nothing
+                                    // just do nothing not to crash the application.
                                 }
 
                                 break;
                             }
                         case 4: // right
-                            if (row1 + shipSize - 1 > 10)
+                            if (coordinate1.Column + shipSize - 1 > 10)
                             {
                                 break;
                             }
                             else
                             {
-                                column2 = row1 + shipSize - 1;
+                                column2 = coordinate1.Column + shipSize - 1;
                                 try
                                 {
-                                    gridsManager.SetShip(shipNumber, row1, column1, row1, column2);
+                                    gridsManager.SetShip(shipNumber, coordinate1, new Coordinate (coordinate1.Row, column2));
                                     isSet = true;
                                 }
                                 catch (Exception ex)
                                 {
-                                    // just do nothing
+                                    // just do nothing not to crash the application.
                                 }
 
                                 break;

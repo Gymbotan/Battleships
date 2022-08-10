@@ -1,4 +1,5 @@
-﻿using Battleships.Ships;
+﻿using Battleships.Entities;
+using Battleships.Ships;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Battleships.Players
         /// Choose coordinates to fire opponent.
         /// </summary>
         /// <returns>Coordinates you want to fire.</returns>
-        public (int, int) Attack()
+        public Coordinate Attack()
         {
             Console.WriteLine("\nInput coordinates you want to attack (from a1 to j10) or 'position' to see grids:");
             return InputCoordinates();
@@ -38,23 +39,22 @@ namespace Battleships.Players
         /// <summary>
         /// Change enemy grid after getting results of your attack.
         /// </summary>
-        /// <param name="row">Row.</param>
-        /// <param name="column">Column.</param>
+        /// <param name="coordinate">Coordinate.</param>
         /// <param name="isHit">Is hit.</param>
-        public void ChangeEnemyGrid(int row, int column, bool isHit)
+        public void ChangeEnemyGrid(Coordinate coordinate, bool isHit)
         {
-            gridsManager.ChangeEnemyGrid(row, column, isHit);
+            gridsManager.ChangeEnemyGrid(coordinate, isHit);
         }
+
 
         /// <summary>
         /// Reaction on getting shot.
         /// </summary>
-        /// <param name="row">Row the enemy fired.</param>
-        /// <param name="column">Column the enemy fired.</param>
+        /// <param name="coordinate">Coordinate the enemy fired.</param>
         /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
-        public (bool, bool, bool) GetShot(int row, int column)
+        public (bool, bool, bool) GetShot(Coordinate coordinate)
         {
-            return gridsManager.GetShot(row, column);
+            return gridsManager.GetShot(coordinate);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Battleships.Players
         }
 
         /// <summary>
-        /// Set ship.
+        /// Set a ship on the grid.
         /// </summary>
         private void SetShip()
         {
@@ -151,7 +151,7 @@ namespace Battleships.Players
         }
 
         /// <summary>
-        /// Select starting and ending places (endpoints) of a choosen ship.
+        /// Select starting and ending coordinates (endpoints) for a choosen ship where it should be placed.
         /// </summary>
         /// <param name="shipIndex">Index number of a ship.</param>
         private void ChooseShipPlacement(int shipIndex)
@@ -161,12 +161,12 @@ namespace Battleships.Players
             {
                 Console.WriteLine("\nTo set a ship you should input both endpoint of a ship (consider ship's size)");
                 Console.WriteLine("Input first endpoint's coordinates (from a1 to j10):");
-                var coordinate1 = InputCoordinates();
+                Coordinate coordinate1 = InputCoordinates();
                 Console.WriteLine("Input second endpoint's coordinates (from a1 to j10):");
-                var coordinate2 = InputCoordinates();
+                Coordinate coordinate2 = InputCoordinates();
                 try
                 {
-                    gridsManager.SetShip(shipIndex, coordinate1.Item1, coordinate1.Item2, coordinate2.Item1, coordinate2.Item2);
+                    gridsManager.SetShip(shipIndex, coordinate1, coordinate2);
                     isPlaceSuccesfullyFinded = true;
                 }
                 catch (Exception ex)
@@ -188,7 +188,7 @@ namespace Battleships.Players
         /// Allow to input coordinates of place (like a1 or c5).
         /// </summary>
         /// <returns></returns>
-        private (int, int) InputCoordinates()
+        private Coordinate InputCoordinates()
         {
             int column;
             char charRow;
@@ -226,7 +226,7 @@ namespace Battleships.Players
             }
 
             int row = CharToInt(charRow);
-            return (row, column);
+            return new Coordinate(row, column);
         }
 
         /// <summary>

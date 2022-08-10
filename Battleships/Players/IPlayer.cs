@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleships.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Battleships.Players
         /// Choose coordinates to fire opponent.
         /// </summary>
         /// <returns>Coordinates you want to fire.</returns>
-        public (int, int) Attack();
+        public Coordinate Attack();
 
         /// <summary>
         /// Set ships on the grid.
@@ -33,7 +34,7 @@ namespace Battleships.Players
         /// <param name="row">Row.</param>
         /// <param name="column">Column.</param>
         /// <param name="isHit">Is hit.</param>
-        public void ChangeEnemyGrid(int row, int column, bool isHit);
+        public void ChangeEnemyGrid(Coordinate coordinate, bool isHit);
 
         /// <summary>
         /// Reaction on getting shot.
@@ -41,7 +42,7 @@ namespace Battleships.Players
         /// <param name="row">Row the enemy fired.</param>
         /// <param name="column">Column the enemy fired.</param>
         /// <returns>Result of attack (is enemy hit, is ship sink, is you lose).</returns>
-        public (bool, bool, bool) GetShot(int row, int column);
+        public (bool, bool, bool) GetShot(Coordinate coordinate);
 
         /// <summary>
         /// Show how own and enemy's grids look like.
