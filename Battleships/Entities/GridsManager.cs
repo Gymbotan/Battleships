@@ -272,5 +272,25 @@ namespace Battleships.Entities
         {
             return enemyGrid[coordinate.Row - 1, coordinate.Column - 1] != ' ';
         }
+
+
+        /// <summary>
+        /// Return own grid.
+        /// </summary>
+        /// <returns>Own grid.</returns>
+        public char[,] GetOwnGrid() => ownGrid;
+
+        /// <summary>
+        /// Return enemy grid.
+        /// </summary>
+        /// <returns>Enemy grid.</returns>
+        public char[,] GetEnemyGrid() => enemyGrid;
+
+        /// <summary>
+        /// Return ships placement.
+        /// </summary>
+        /// <returns>Ships placement.</returns>
+        public int[,] GetShipsPlacement() => shipsPlacement;
+
     }
 }
