@@ -167,7 +167,6 @@ namespace Battleships.GameModes
                 Console.WriteLine("Unfortunately you miss. It's enemy turn.\n");
             }
 
-
             return (isHit, !isWin);
         }
 
@@ -185,12 +184,12 @@ namespace Battleships.GameModes
             if (isSink)
             {
                 Console.WriteLine($"Unfortunately enemy fires {IntToChar(coordinate.Row)}{coordinate.Column} and sinks our ship (((  Now he shoots again.");
-                System.Threading.Thread.Sleep(1500);
+                System.Threading.Thread.Sleep(1500); // Imitation of computer thinking between shoots
             }
             else if (isHit)
             {
                 Console.WriteLine($"Enemy strikes {IntToChar(coordinate.Row)}{coordinate.Column} and hits our ship ( Now he fires one more time.");
-                System.Threading.Thread.Sleep(1500);
+                System.Threading.Thread.Sleep(1500); // Imitation of computer thinking between shoots
             }
             else
             {

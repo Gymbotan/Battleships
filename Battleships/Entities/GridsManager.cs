@@ -76,8 +76,8 @@ namespace Battleships.Entities
             }
             
             bool isHit = false;
-            bool isDead = false;
-            bool isLose = false;
+            bool isShipSink = false;
+            bool isPlayerLose = false;
             int HittedShipIndex = shipsPlacement[coordinate.Row - 1, coordinate.Column - 1];
 
             ownGrid[coordinate.Row - 1, coordinate.Column - 1] = (shipsPlacement[coordinate.Row - 1, coordinate.Column - 1] > 0 
@@ -85,7 +85,7 @@ namespace Battleships.Entities
 
             if (HittedShipIndex <= 0)
             {
-                return (isHit, isDead, isLose);
+                return (isHit, isShipSink, isPlayerLose);
             }
             else
             {
@@ -95,15 +95,15 @@ namespace Battleships.Entities
                 if (Ships[HittedShipIndex - 1].Holes == Ships[HittedShipIndex - 1].Size)
                 {
                     Ships[HittedShipIndex - 1].IsAlive = false;
-                    isDead = true;
+                    isShipSink = true;
                 }
 
                 if (Ships.All(s => !s.IsAlive))
                 {
-                    isLose = true;
+                    isPlayerLose = true;
                 }
 
-                return (isHit, isDead, isLose);
+                return (isHit, isShipSink, isPlayerLose);
             }
         }
 
@@ -115,6 +115,7 @@ namespace Battleships.Entities
         /// <param name="coordinate2">Coordinate2 (another ship's endpoint)</param>
         public void SetShip(int shipIndex, Coordinate coordinate1, Coordinate coordinate2)
         {
+            #region parameters' checking
             if (shipIndex < 1 || shipIndex > Ships.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(shipIndex), $"ShipIndex should be between 1 and {Ships.Length}.");
@@ -149,6 +150,7 @@ namespace Battleships.Entities
             {
                 throw new ArgumentException("You can not place your ship here. You collide with another ship. please try again.");
             }
+            #endregion
 
             if (coordinate1.Row == coordinate2.Row)
             {
@@ -227,6 +229,7 @@ namespace Battleships.Entities
         /// <returns></returns>
         public bool IsPossibleToSetShip(Coordinate coordinate1, Coordinate coordinate2)
         {
+            #region parameters' checking
             if (coordinate1.Row < 1 || coordinate1.Row > 10 || coordinate1.Column < 1 || coordinate1.Column > 10)
             {
                 throw new ArgumentOutOfRangeException(nameof(coordinate1));
@@ -236,7 +239,8 @@ namespace Battleships.Entities
             {
                 throw new ArgumentOutOfRangeException(nameof(coordinate2));
             }
-            
+            #endregion
+
             if (coordinate1.Row == coordinate2.Row)
             {
                 for (int i = Math.Min(coordinate1.Column, coordinate2.Column); i <= Math.Max(coordinate1.Column, coordinate2.Column); i++)

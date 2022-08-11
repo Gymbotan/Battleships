@@ -14,6 +14,7 @@ namespace Battleships.Entities
 
         public Coordinate(int row, int column)
         {
+            #region parameters' checking
             if (row < 1 || row > 10)
             {
                 throw new ArgumentOutOfRangeException(nameof(row));
@@ -23,7 +24,7 @@ namespace Battleships.Entities
             {
                 throw new ArgumentOutOfRangeException(nameof(column));
             }
-
+            #endregion
             Row = row;
             Column = column;
         }

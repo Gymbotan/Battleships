@@ -99,6 +99,7 @@ namespace Battleships.Players
                     count++;
                     switch (rnd.Next(1, 4)) // we randomly choose direction where to set the ship from initial point
                     {
+                        #region set ship up (if possible) from initial point (coordinate1)
                         case 1: // up
                             if (coordinate1.Row - shipSize + 1 < 1)
                             {
@@ -119,6 +120,8 @@ namespace Battleships.Players
 
                                 break;
                             }
+                        #endregion
+                        #region set ship down (if possible) from initial point (coordinate1)
                         case 2: // down
                             if (coordinate1.Row + shipSize - 1 > 10)
                             {
@@ -139,6 +142,8 @@ namespace Battleships.Players
 
                                 break;
                             }
+                        #endregion
+                        #region set ship to the left (if possible) from initial point (coordinate1)
                         case 3: // left
                             if (coordinate1.Column - shipSize + 1 < 1)
                             {
@@ -159,6 +164,8 @@ namespace Battleships.Players
 
                                 break;
                             }
+                        #endregion
+                        #region set ship to the right (if possible) from initial point (coordinate1)
                         case 4: // right
                             if (coordinate1.Column + shipSize - 1 > 10)
                             {
@@ -179,6 +186,7 @@ namespace Battleships.Players
 
                                 break;
                             }
+                        #endregion
                     }
                 }
             }
